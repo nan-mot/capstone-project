@@ -1,0 +1,25 @@
+package com.stroimvmeste.backend.dto;
+
+
+import com.stroimvmeste.backend.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+
+import java.util.List;
+@Getter
+@Setter
+@AllArgsConstructor
+public class InitiativeFullDto {
+    private Long id;
+
+    private String title;
+
+    private String description;
+
+    private List<UserLiteDto> participants;
+
+    private Long specialization;
+
+}

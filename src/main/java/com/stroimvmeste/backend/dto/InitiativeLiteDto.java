@@ -1,16 +1,19 @@
 package com.stroimvmeste.backend.dto;
 
 import com.stroimvmeste.backend.model.Specialization;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-public class InitiativeCreateDto {
+@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class InitiativeLiteDto {
 
     private long id;
     private String title;
     private String description;
-    private Specialization specialization;
+    private Long specialization;
 
 }

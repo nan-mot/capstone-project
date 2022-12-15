@@ -1,41 +1,45 @@
 package com.stroimvmeste.backend.controller;
 
-import com.stroimvmeste.backend.dto.InitiativeCreateDto;
-import org.springframework.ui.Model;
+import com.stroimvmeste.backend.dto.ExpertDto;
+import com.stroimvmeste.backend.dto.InitiativeFullDto;
+import com.stroimvmeste.backend.dto.InitiativeLiteDto;
+import com.stroimvmeste.backend.service.InitiativeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/news")
+@RequestMapping("/api/initiatives")
+@RequiredArgsConstructor
 public class InitiativeController {
 
+    private final InitiativeService initiativeService;
 
     @PostMapping("/create")
-    public InitiativeCreateDto createInitiative(@RequestBody InitiativeCreateDto initiativeCreateDto) {
-        System.out.println("CREATING PEACE OF NEWS:");
-        System.out.println("TITLE: " + initiativeCreateDto.getTitle());
-        System.out.println("DESCRIPTION: " + initiativeCreateDto.getDescription());
-        return initiativeCreateDto;
+    public InitiativeLiteDto createInitiative(@RequestBody InitiativeLiteDto initiativeLiteDto) {
+        return initiativeService.addInitiative(initiativeLiteDto);
     }
 
-//    @GetMapping("/addProject")
-//    public String addProjectView(Model model) {
-//        model.addAttribute("project", new Project());
-//        List<District> districts = districtService.getAllDistricts();
-//        model.addAttribute("districts", districts);
-//        return "add-project";
-//    }
-//
-//    @PostMapping("/addProject")
-//    public RedirectView addProject(@ModelAttribute("project") Project project, RedirectAttributes redirectAttributes) {
-//        final RedirectView redirectView = new RedirectView("all", true);
-//        Project savedProject = projectService.addProject(project);
-//        redirectAttributes.addFlashAttribute("savedProject", savedProject);
-//        redirectAttributes.addFlashAttribute("addProjectSuccess", true);
-//        return redirectView;
-//    }
+    @GetMapping("/all")
+    public List<InitiativeLiteDto> viewAllInitiatives() {
+        return initiativeService.getAllInitiatives();
+    }
+
+    @GetMapping("/{id}")
+    public InitiativeFullDto viewInitiative(@PathVariable Long id) {
+        return initiativeService.getInitiative(id).get();
+    }
+
+    @PostMapping("/{initiativeId}/participate/{userId}")
+    public void addParticipant(@PathVariable Long initiativeId,@PathVariable Long userId) {
+        initiativeService.addParticipant(initiativeId,userId);
+    }
+
+    @GetMapping("/{id}/experts")
+    public List<ExpertDto> generateListOfExperts(@PathVariable Long id) {
+
+        return initiativeService.generateListOfExperts(id);
+    }
 }
