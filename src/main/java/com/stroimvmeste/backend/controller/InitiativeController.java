@@ -3,6 +3,7 @@ package com.stroimvmeste.backend.controller;
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.InitiativeFullDto;
 import com.stroimvmeste.backend.dto.InitiativeLiteDto;
+import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.service.InitiativeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,4 +43,11 @@ public class InitiativeController {
 
         return initiativeService.generateListOfExperts(id);
     }
+    @GetMapping("/{id}/participants")
+    public List<UserLiteDto> generateListOfParticipants(@PathVariable Long id) {
+
+        return initiativeService.getParticipantsLiteDto(id);
+    }
+
+
 }

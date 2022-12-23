@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -73,6 +74,7 @@ public class UserService {
 
     public List<UserLiteDto> getAllUsers() {
         List<UserLiteDto> userLiteDtos = new ArrayList<>();
+        Object jhvjv = userRepository.findAll();
         for (User user : userRepository.findAll()) {
             userLiteDtos.add(mapUserToLiteDto(user));
         }

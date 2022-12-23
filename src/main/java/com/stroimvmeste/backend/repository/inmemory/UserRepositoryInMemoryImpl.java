@@ -14,27 +14,14 @@ import java.util.Optional;
 
 @Component
 @Profile("inmemory")
-public class UserRepositoryInMemoryImpl implements UserRepository {
+public class UserRepositoryInMemoryImpl extends AbstractInMemory<User> implements UserRepository {
 
-    private final Map<Long, User> storage = new HashMap<>();
+    public UserRepositoryInMemoryImpl() {
+        super(UserRepositoryInMemoryImpl.class.getSimpleName(), User.class);
+    }
 
     @Override
     public User save(User user) {
-        return storage.put(user.getId(), user);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        storage.remove(id);
-    }
-
-    @Override
-    public Optional<User> findById(Long id) {
-        return Optional.ofNullable(storage.get(id));
-    }
-
-    @Override
-    public Iterable<User> findAll() {
-        return storage.values();
+        return get(put(user.getId(), user));
     }
 }

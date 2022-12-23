@@ -75,17 +75,14 @@ public class InitiativeService {
         }
     }
     public List<UserLiteDto> getParticipantsLiteDto(Long id){
-/*        Optional<Initiative> optionalInitiative = initiativeRepository.findById(id);
+        Optional<Initiative> optionalInitiative = initiativeRepository.findById(id);
+        List<UserLiteDto> userLiteDtos = new ArrayList<>();
         if (optionalInitiative.isPresent()) {
             Initiative initiative = optionalInitiative.get();
-            List<UserLiteDto> userLiteDtos = new ArrayList<>();
             for (User user : initiative.getParticipants()) {
                 userLiteDtos.add(new UserLiteDto(user.getId(), user.getFullName(), user.getUserName()));
             }
-
-        }*/
-
-      return null;
+        } return userLiteDtos;
     }
 
     public List<ExpertDto> generateListOfExperts(Long id) {

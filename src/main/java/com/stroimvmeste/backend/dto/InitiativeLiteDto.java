@@ -1,7 +1,9 @@
 package com.stroimvmeste.backend.dto;
 
-import com.stroimvmeste.backend.model.Specialization;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter
@@ -11,7 +13,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class InitiativeLiteDto {
 
-    private long id;
+    private Long id;
     private String title;
     private String description;
     private Long specialization;
