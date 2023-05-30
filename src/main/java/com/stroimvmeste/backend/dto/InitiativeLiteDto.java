@@ -14,8 +14,11 @@ import lombok.experimental.Accessors;
 public class InitiativeLiteDto {
 
     private Long id;
+
     private String title;
+
     private String description;
+
     private Long specialization;
 
 }

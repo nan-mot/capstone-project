@@ -1,4 +1,4 @@
-package com.stroimvmeste.backend.service;
+package com.stroimvmeste.backend.controller.service;
 
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.InitiativeFullDto;
@@ -34,7 +34,8 @@ public class InitiativeService {
         Optional<Initiative> initiativeOptional = initiativeRepository.findById(id);
         if (initiativeOptional.isPresent()) {
             Initiative initiative = initiativeOptional.get();
-            return Optional.of(new InitiativeFullDto(initiative.getId(), initiative.getTitle(), initiative.getDescription(), getParticipantsLiteDto(id), initiative.getSpecialization().getId()));
+            return Optional.of(new InitiativeFullDto(initiative.getId(), initiative.getTitle(),
+                    initiative.getDescription(), getParticipantsLiteDto(id), initiative.getSpecialization().getId()));
         } else {
             return Optional.empty();
         }
@@ -101,7 +102,8 @@ public class InitiativeService {
         List<ExpertDto> expertsDto = new ArrayList<>();
         for (User participant : experts) {
             expertsDto.add(new ExpertDto(participant.getId(),
-                    participant.getFullName(), participant.getUserName(), participant.getSpecialization().getId(), participant.getExperience()));
+                    participant.getFullName(), participant.getUserName(),
+                    participant.getSpecialization().getId(), participant.getExperience()));
         }
         return expertsDto;
     }

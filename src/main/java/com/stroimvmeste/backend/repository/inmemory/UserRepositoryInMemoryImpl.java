@@ -20,8 +20,4 @@ public class UserRepositoryInMemoryImpl extends AbstractInMemory<User> implement
         super(UserRepositoryInMemoryImpl.class.getSimpleName(), User.class);
     }
 
-    @Override
-    public User save(User user) {
-        return get(put(user.getId(), user));
-    }
 }

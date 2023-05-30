@@ -8,6 +8,5 @@ public interface SpecializationRepository {
     Specialization save(Specialization specialization);
     void deleteById(Long id);
     Optional<Specialization> findById(Long id);
-
     Iterable<Specialization> findAll();
 }

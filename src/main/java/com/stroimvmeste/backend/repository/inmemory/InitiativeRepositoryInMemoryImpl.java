@@ -13,9 +13,4 @@ public class InitiativeRepositoryInMemoryImpl extends AbstractInMemory<Initiativ
     public InitiativeRepositoryInMemoryImpl() {
         super(InitiativeRepositoryInMemoryImpl.class.getSimpleName(), Initiative.class);
     }
-
-    @Override
-    public Initiative save(Initiative initiative) {
-        return get(put(initiative.getId(), initiative));
-    }
 }

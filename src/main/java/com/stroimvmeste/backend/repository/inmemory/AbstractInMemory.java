@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,38 +45,28 @@ public abstract class AbstractInMemory<T> {
         maxId = storage.keySet().stream().max(Long::compareTo).orElse(0L);
     }
 
-    protected Long put(Long id, T value) {
-        if (id != null) {
-            storage.put(id, value);
-            return id;
-        } else {
+    @SneakyThrows
+    public T save(T value) {
+        Long id = (Long) FieldUtils.readDeclaredField(value, "id", true);
+        if (id == null) {
             storage.put(++maxId, value);
-            return maxId;
+            FieldUtils.writeDeclaredField(value, "id", maxId, true);
+        } else {
+            storage.put(id, value);
         }
-    }
-
-    protected T get(Long id) {
-        return storage.get(id);
-    }
-
-    protected void remove(Long id) {
-        storage.remove(id);
-    }
-
-    protected List<T> getValuesList() {
-        return storage.values().stream().toList();
+        return value;
     }
 
     public void deleteById(Long id) {
-        remove(id);
+        storage.remove(id);
     }
 
     public Optional<T> findById(Long id) {
-        return Optional.ofNullable(get(id));
+        return Optional.ofNullable(storage.get(id));
     }
 
     public Iterable<T> findAll() {
-        return getValuesList();
+        return storage.values().stream().toList();
     }
 
     @SneakyThrows

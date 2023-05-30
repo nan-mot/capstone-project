@@ -1,9 +1,7 @@
 package com.stroimvmeste.backend.controller;
 
 import com.stroimvmeste.backend.dto.SpecializationDto;
-import com.stroimvmeste.backend.dto.UserLiteDto;
-import com.stroimvmeste.backend.service.InitiativeService;
-import com.stroimvmeste.backend.service.SpecializationService;
+import com.stroimvmeste.backend.controller.service.SpecializationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
