@@ -1,4 +1,4 @@
-package com.stroimvmeste.backend.controller.service;
+package com.stroimvmeste.backend.service;
 
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.InitiativeFullDto;
@@ -12,7 +12,10 @@ import com.stroimvmeste.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -75,7 +78,8 @@ public class InitiativeService {
             optionalUser.ifPresent(user -> initiative.getParticipants().add(user));
         }
     }
-    public List<UserLiteDto> getParticipantsLiteDto(Long id){
+
+    public List<UserLiteDto> getParticipantsLiteDto(Long id) {
         Optional<Initiative> optionalInitiative = initiativeRepository.findById(id);
         List<UserLiteDto> userLiteDtos = new ArrayList<>();
         if (optionalInitiative.isPresent()) {
@@ -83,7 +87,8 @@ public class InitiativeService {
             for (User user : initiative.getParticipants()) {
                 userLiteDtos.add(new UserLiteDto(user.getId(), user.getFullName(), user.getUserName()));
             }
-        } return userLiteDtos;
+        }
+        return userLiteDtos;
     }
 
     public List<ExpertDto> generateListOfExperts(Long id) {
@@ -95,8 +100,8 @@ public class InitiativeService {
             if (participant.getSpecialization() != null) {
                 if (participant.getSpecialization().getId() == specializationId) {
                     experts.add(participant);
-            } else continue;
-            } else continue;
+                }
+            }
         }
         experts.sort(Comparator.comparingDouble(User::getExperience).reversed());
         List<ExpertDto> expertsDto = new ArrayList<>();

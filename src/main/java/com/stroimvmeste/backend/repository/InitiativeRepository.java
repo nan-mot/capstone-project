@@ -1,9 +1,7 @@
 package com.stroimvmeste.backend.repository;
 
-import com.stroimvmeste.backend.dto.InitiativeLiteDto;
 import com.stroimvmeste.backend.model.Initiative;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface InitiativeRepository {

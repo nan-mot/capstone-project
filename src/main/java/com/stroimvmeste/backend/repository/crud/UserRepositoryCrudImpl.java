@@ -1,3 +1,4 @@
+/*
 package com.stroimvmeste.backend.repository.crud;
 
 import com.stroimvmeste.backend.model.User;
@@ -8,3 +9,4 @@ import org.springframework.data.repository.CrudRepository;
 @Profile("crud")
 public interface UserRepositoryCrudImpl extends CrudRepository<User, Long>, UserRepository {
 }
+*/

@@ -1,4 +1,4 @@
-package com.stroimvmeste.backend.controller.service;
+package com.stroimvmeste.backend.service;
 
 import com.stroimvmeste.backend.dto.SpecializationDto;
 import com.stroimvmeste.backend.model.Specialization;

@@ -1,6 +1,5 @@
 package com.stroimvmeste.backend.dto;
 
-import com.stroimvmeste.backend.model.Specialization;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

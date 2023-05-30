@@ -1,3 +1,4 @@
+/*
 package com.stroimvmeste.backend.repository.crud;
 
 import com.stroimvmeste.backend.model.Initiative;
@@ -9,3 +10,4 @@ import org.springframework.data.repository.CrudRepository;
 public interface InitiativeRepositoryCrudImpl extends CrudRepository<Initiative, Long>, InitiativeRepository {
 
 }
+*/

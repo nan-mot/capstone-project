@@ -2,11 +2,12 @@ package com.stroimvmeste.backend.repository.inmemory;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
