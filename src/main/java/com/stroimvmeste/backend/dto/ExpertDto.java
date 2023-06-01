@@ -18,7 +18,9 @@ public class ExpertDto {
 
     private String userName;
 
-    private Long specialization;
+    private String specialization;
+
+    private String district;
 
     private Double experience;
 }

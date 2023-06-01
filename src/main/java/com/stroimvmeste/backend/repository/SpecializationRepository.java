@@ -9,4 +9,6 @@ public interface SpecializationRepository {
     void deleteById(Long id);
     Optional<Specialization> findById(Long id);
     Iterable<Specialization> findAll();
+    Specialization findByName(String name);
+
 }

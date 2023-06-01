@@ -13,6 +13,6 @@ public interface InitiativeRepository {
     Optional<Initiative> findById(Long id);
 
     Iterable<Initiative> findAll();
-
+    Optional<Initiative> findByTitle(String title);
 
 }

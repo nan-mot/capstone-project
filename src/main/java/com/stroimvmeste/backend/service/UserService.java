@@ -2,7 +2,9 @@ package com.stroimvmeste.backend.service;
 
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
+import com.stroimvmeste.backend.model.District;
 import com.stroimvmeste.backend.model.User;
+import com.stroimvmeste.backend.repository.DistrictRepository;
 import com.stroimvmeste.backend.repository.SpecializationRepository;
 import com.stroimvmeste.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    public final UserRepository userRepository;
-    public final SpecializationRepository specializationRepository;
+    private final UserRepository userRepository;
+    private final SpecializationRepository specializationRepository;
+
+    private final DistrictRepository districtRepository;
 
     public UserLiteDto addUser(UserLiteDto userLiteDto) {
         userRepository.save(mapLiteDtoToUser(userLiteDto));
@@ -33,25 +37,26 @@ public class UserService {
         return new UserLiteDto()
                 .setId(user.getId())
                 .setFullName(user.getFullName())
-                .setUserName(user.getUserName());
+                .setUserName(user.getUserName())
+                .setDistrict(user.getDistrict().getTitle());
     }
 
 
     public User mapLiteDtoToUser(UserLiteDto userLiteDto) {
         return new User()
-                .setId(userLiteDto.getId())
                 .setFullName(userLiteDto.getFullName())
-                .setUserName(userLiteDto.getUserName());
+                .setUserName(userLiteDto.getUserName())
+                .setDistrict(districtRepository.findByTitle(userLiteDto.getDistrict()).orElse(null));
     }
 
 
     public User mapExpertDtoToUser(ExpertDto expertDto) {
         return new User()
-                .setId(expertDto.getId())
                 .setFullName(expertDto.getFullName())
                 .setUserName(expertDto.getUserName())
                 .setExperience(expertDto.getExperience())
-                .setSpecialization(specializationRepository.findById(expertDto.getSpecialization()).get());
+                .setSpecialization(specializationRepository.findByName(expertDto.getSpecialization()))
+                .setDistrict(districtRepository.findByTitle(expertDto.getDistrict()).orElse(null));
     }
 
     public void deleteUser(Long id) {

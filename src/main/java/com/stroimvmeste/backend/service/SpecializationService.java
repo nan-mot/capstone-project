@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SpecializationService {
 
-    public final SpecializationRepository specializationRepository;
+    private final SpecializationRepository specializationRepository;
 
     public SpecializationDto addSpecialization(SpecializationDto specializationDto) {
         specializationRepository.save(mapDtoToSpecialization(specializationDto));
@@ -34,7 +34,6 @@ public class SpecializationService {
 
     public Specialization mapDtoToSpecialization(SpecializationDto specializationDto) {
         return new Specialization()
-                .setId(specializationDto.getId())
                 .setName(specializationDto.getName());
     }
 

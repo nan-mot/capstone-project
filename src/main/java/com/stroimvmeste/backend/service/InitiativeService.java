@@ -6,12 +6,12 @@ import com.stroimvmeste.backend.dto.InitiativeLiteDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.model.Initiative;
 import com.stroimvmeste.backend.model.User;
+import com.stroimvmeste.backend.repository.DistrictRepository;
 import com.stroimvmeste.backend.repository.InitiativeRepository;
 import com.stroimvmeste.backend.repository.SpecializationRepository;
 import com.stroimvmeste.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,9 +21,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class InitiativeService {
 
-    public final InitiativeRepository initiativeRepository;
-    public final UserRepository userRepository;
-    public final SpecializationRepository specializationRepository;
+    private final InitiativeRepository initiativeRepository;
+    private final UserRepository userRepository;
+    private final SpecializationRepository specializationRepository;
+
+    private final DistrictRepository districtRepository;
 
     public List<InitiativeLiteDto> getAllInitiatives() {
         List<InitiativeLiteDto> initiativeLiteDtos = new ArrayList<>();
@@ -33,12 +35,12 @@ public class InitiativeService {
         return initiativeLiteDtos;
     }
 
-    public Optional<InitiativeFullDto> getInitiative(Long id) {
-        Optional<Initiative> initiativeOptional = initiativeRepository.findById(id);
+    public Optional<InitiativeFullDto> getInitiative(String title) {
+        Optional<Initiative> initiativeOptional = initiativeRepository.findByTitle(title);
         if (initiativeOptional.isPresent()) {
             Initiative initiative = initiativeOptional.get();
             return Optional.of(new InitiativeFullDto(initiative.getId(), initiative.getTitle(),
-                    initiative.getDescription(), getParticipantsLiteDto(id), initiative.getSpecialization().getId()));
+                    initiative.getDescription(), getParticipantsLiteDto(title), initiative.getSpecialization().getName(), initiative.getDistrict().getTitle()));
         } else {
             return Optional.empty();
         }
@@ -55,45 +57,46 @@ public class InitiativeService {
                 .setId(initiative.getId())
                 .setTitle(initiative.getTitle())
                 .setDescription(initiative.getDescription())
-                .setSpecialization(initiative.getSpecialization().getId());
+                .setSpecialization(initiative.getSpecialization().getName())
+                .setDistrict(initiative.getDistrict().getTitle());
     }
 
     public Initiative mapLiteDtoToInitiative(InitiativeLiteDto initiativeLiteDto) {
         return new Initiative()
-                .setId(initiativeLiteDto.getId())
                 .setTitle(initiativeLiteDto.getTitle())
                 .setDescription(initiativeLiteDto.getDescription())
-                .setSpecialization(specializationRepository.findById(initiativeLiteDto.getSpecialization()).get());
+                .setSpecialization(specializationRepository.findByName(initiativeLiteDto.getSpecialization()))
+                .setDistrict(districtRepository.findByTitle(initiativeLiteDto.getDistrict()).orElse(null));
     }
 
     public void deleteInitiative(Long id) {
         initiativeRepository.deleteById(id);
     }
 
-    public void addParticipant(Long initiativeId, Long userId) {
-        Optional<Initiative> optionalInitiative = initiativeRepository.findById(initiativeId);
+    public void addParticipant(String initiativeTitle, String userName) {
+        Optional<Initiative> optionalInitiative = initiativeRepository.findByTitle(initiativeTitle);
         if (optionalInitiative.isPresent()) {
             Initiative initiative = optionalInitiative.get();
-            Optional<User> optionalUser = userRepository.findById(userId);
+            Optional<User> optionalUser = userRepository.findByUserName(userName);
             optionalUser.ifPresent(user -> initiative.getParticipants().add(user));
         }
     }
 
-    public List<UserLiteDto> getParticipantsLiteDto(Long id) {
-        Optional<Initiative> optionalInitiative = initiativeRepository.findById(id);
+    public List<UserLiteDto> getParticipantsLiteDto(String title) {
+        Optional<Initiative> optionalInitiative = initiativeRepository.findByTitle(title);
         List<UserLiteDto> userLiteDtos = new ArrayList<>();
         if (optionalInitiative.isPresent()) {
             Initiative initiative = optionalInitiative.get();
             for (User user : initiative.getParticipants()) {
-                userLiteDtos.add(new UserLiteDto(user.getId(), user.getFullName(), user.getUserName()));
+                userLiteDtos.add(new UserLiteDto(user.getId(), user.getFullName(), user.getUserName(), user.getDistrict().getTitle()));
             }
         }
         return userLiteDtos;
     }
 
-    public List<ExpertDto> generateListOfExperts(Long id) {
-        Initiative initiative = initiativeRepository.findById(id).get();
-        Long specializationId = initiative.getSpecialization().getId();
+    public List<ExpertDto> generateListOfExperts(String title) {
+        Initiative initiative = initiativeRepository.findByTitle(title).get();
+        long specializationId = initiative.getSpecialization().getId();
         List<User> participants = initiative.getParticipants();
         List<User> experts = new ArrayList<>();
         for (User participant : participants) {
@@ -108,7 +111,7 @@ public class InitiativeService {
         for (User participant : experts) {
             expertsDto.add(new ExpertDto(participant.getId(),
                     participant.getFullName(), participant.getUserName(),
-                    participant.getSpecialization().getId(), participant.getExperience()));
+                    participant.getSpecialization().getName(), participant.getDistrict().getTitle(), participant.getExperience()));
         }
         return expertsDto;
     }

@@ -6,6 +6,8 @@ import com.stroimvmeste.backend.repository.UserRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @Profile("inmemory")
 public class UserRepositoryInMemoryImpl extends AbstractInMemory<User> implements UserRepository {
@@ -14,4 +16,8 @@ public class UserRepositoryInMemoryImpl extends AbstractInMemory<User> implement
         super(UserRepositoryInMemoryImpl.class.getSimpleName(), User.class);
     }
 
+    @Override
+    public Optional<User> findByUserName(String userName) {
+        return Optional.empty();
+    }
 }

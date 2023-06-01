@@ -3,16 +3,18 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Добавить инициативу</title>
+    <title>Create new initiative</title>
 </head>
 <body>
 <c:if test="${addInitiativeSuccess}">
-    <div> Инициатива успешно добавлена : ${savedInitiative.title}</div>
+    <div> The initiative created successfully : ${savedInitiative.title}</div>
 </c:if>
-<c:url var="add_initiative_url" value="/api/initiatives/create"/>
+<c:url var="add_initiative_url" value="/createInitiative"/>
 <form:form action="${add_initiative_url}" method="post" modelAttribute="initiative">
-    <form:label path="title">Название инициативы: </form:label> <form:input type="text" path="title"/>
-    <form:label path="description">Описание: </form:label> <form:input path="description"/>
+    <form:label path="title">Initiative title: </form:label> <form:input type="text" path="title"/>
+    <form:label path="description">Description: </form:label> <form:input path="description"/>
+    <form:label path="specialization">Specialization: </form:label> <form:input path="specialization"/>
+    <form:label path="district">District: </form:label> <form:input path="district"/>
     <input type="submit" value="submit"/>
 </form:form>
 </body>

@@ -13,4 +13,6 @@ public interface UserRepository {
 
     Iterable<User> findAll();
 
+    Optional<User> findByUserName(String userName);
+
 }

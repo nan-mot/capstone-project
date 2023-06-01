@@ -1,6 +1,5 @@
 package com.stroimvmeste.backend.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +11,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLiteDto {
+public class DistrictDto {
 
-    private long id;
+    private Long id;
 
-    private String fullName;
-
-    private String userName;
-
-    private String district;
+    private String title;
 }

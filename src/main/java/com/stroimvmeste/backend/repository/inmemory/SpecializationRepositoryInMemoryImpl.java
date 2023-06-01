@@ -14,4 +14,8 @@ public class SpecializationRepositoryInMemoryImpl extends AbstractInMemory<Speci
         super(SpecializationRepositoryInMemoryImpl.class.getSimpleName(), Specialization.class);
     }
 
+    @Override
+    public Specialization findByName(String name) {
+        return null;
+    }
 }

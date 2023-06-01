@@ -18,6 +18,8 @@ public class InitiativeFullDto {
 
     private List<UserLiteDto> participants;
 
-    private Long specialization;
+    private String specialization;
+
+    private String district;
 
 }

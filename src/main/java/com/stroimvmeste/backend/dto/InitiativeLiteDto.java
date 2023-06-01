@@ -19,6 +19,8 @@ public class InitiativeLiteDto {
 
     private String description;
 
-    private Long specialization;
+    private String specialization;
+
+    private String district;
 
 }

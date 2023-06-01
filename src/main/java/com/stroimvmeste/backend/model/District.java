@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,19 +26,19 @@ import java.util.List;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Specialization {
+public class District {
     @Id
-    @Column(name = "specialization_name")
+    @Column(name = "district_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
 
-    @Column(name = "name",
+    @Column(name = "title",
             unique = true)
-    private String name;
+    private String title;
 
-    @OneToMany(mappedBy = "specialization")
+    @OneToMany(mappedBy = "district")
     private List<Initiative> initiatives = new ArrayList<>();
 
-    @OneToMany(mappedBy = "specialization")
+    @OneToMany(mappedBy = "district")
     private List<User> users = new ArrayList<>();
 }
