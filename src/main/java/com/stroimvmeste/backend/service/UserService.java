@@ -1,6 +1,8 @@
 package com.stroimvmeste.backend.service;
 
 import com.stroimvmeste.backend.dto.ExpertDto;
+import com.stroimvmeste.backend.dto.UserDistrictIdDto;
+import com.stroimvmeste.backend.dto.UserDistrictTitleDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.model.District;
 import com.stroimvmeste.backend.model.User;
@@ -23,7 +25,7 @@ public class UserService {
 
     private final DistrictRepository districtRepository;
 
-    public UserLiteDto addUser(UserLiteDto userLiteDto) {
+    public UserLiteDto addUser(UserDistrictIdDto userLiteDto) {
         userRepository.save(mapLiteDtoToUser(userLiteDto));
         return userLiteDto;
     }
@@ -33,20 +35,20 @@ public class UserService {
         return expertDto;
     }
 
-    public UserLiteDto mapUserToLiteDto(User user) {
-        return new UserLiteDto()
-                .setId(user.getId())
-                .setFullName(user.getFullName())
-                .setUserName(user.getUserName())
-                .setDistrict(user.getDistrict().getTitle());
+    public UserDistrictTitleDto mapUserToLiteDto(User user) {
+        return new UserDistrictTitleDto(user.getId(),
+                user.getFullName(),
+                user.getUserName(),
+                user.getDistrict().getTitle());
     }
 
 
-    public User mapLiteDtoToUser(UserLiteDto userLiteDto) {
+    public User mapLiteDtoToUser(UserDistrictIdDto userLiteDto) {
+        District district = districtRepository.findById(userLiteDto.getDistrictId()).orElse(null);
         return new User()
                 .setFullName(userLiteDto.getFullName())
                 .setUserName(userLiteDto.getUserName())
-                .setDistrict(districtRepository.findByTitle(userLiteDto.getDistrict()).orElse(null));
+                .setDistrict(district);
     }
 
 
@@ -63,7 +65,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Optional<UserLiteDto> getUser(Long id) {
+    public Optional<UserDistrictTitleDto> getUser(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -73,9 +75,10 @@ public class UserService {
         }
     }
 
-    public List<UserLiteDto> getAllUsers() {
-        List<UserLiteDto> userLiteDtos = new ArrayList<>();
-        for (User user : userRepository.findAll()) {
+    public List<UserDistrictTitleDto> getAllUsers() {
+        Iterable<User> allUsers = userRepository.findAll();
+        List<UserDistrictTitleDto> userLiteDtos = new ArrayList<>();
+        for (User user : allUsers) {
             userLiteDtos.add(mapUserToLiteDto(user));
         }
         return userLiteDtos;

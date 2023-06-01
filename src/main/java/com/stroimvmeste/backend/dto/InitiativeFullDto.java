@@ -16,7 +16,7 @@ public class InitiativeFullDto {
 
     private String description;
 
-    private List<UserLiteDto> participants;
+    private List<UserDistrictTitleDto> participants;
 
     private String specialization;
 

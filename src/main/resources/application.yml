@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  sql:
+    init:
+      mode: NEVER
   profiles:
     active: crud
   mvc:
@@ -14,6 +17,7 @@ spring:
     password: 1111
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: true

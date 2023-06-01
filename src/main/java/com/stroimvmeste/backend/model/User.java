@@ -44,11 +44,11 @@ public class User {
     private Double experience;
 
     @ManyToOne
-    @JoinColumn(name = "specialization_id", insertable = false, updatable = false)
+    @JoinColumn(name = "specialization_id")
     private Specialization specialization;
 
     @ManyToOne
-    @JoinColumn(name = "district_id", insertable = false, updatable = false)
+    @JoinColumn(name = "district_id")
     private District district;
 
     @ManyToMany(mappedBy = "participants")

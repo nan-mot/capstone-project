@@ -1,7 +1,9 @@
 package com.stroimvmeste.backend.controller;
 
 import com.stroimvmeste.backend.dto.ExpertDto;
+import com.stroimvmeste.backend.dto.UserDistrictIdDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
+import com.stroimvmeste.backend.service.DistrictService;
 import com.stroimvmeste.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,16 +17,19 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
+    private final DistrictService districtService;
 
     @GetMapping("/createUser")
     public String createUserView(Model model) {
         model.addAttribute("user", new UserLiteDto());
+        model.addAttribute("districts", districtService.getAllDistricts());
         return "create-user";
     }
 
     @PostMapping("/createUser")
-    public RedirectView createUser(@ModelAttribute("user") UserLiteDto userLiteDto, RedirectAttributes redirectAttributes) {
+    public RedirectView createUser(@ModelAttribute("user") UserDistrictIdDto userLiteDto, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("allUsers", true);
         UserLiteDto savedUser = userService.addUser(userLiteDto);
         redirectAttributes.addFlashAttribute("savedUser", savedUser);

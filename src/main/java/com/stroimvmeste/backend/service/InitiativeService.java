@@ -3,6 +3,7 @@ package com.stroimvmeste.backend.service;
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.InitiativeFullDto;
 import com.stroimvmeste.backend.dto.InitiativeLiteDto;
+import com.stroimvmeste.backend.dto.UserDistrictTitleDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.model.Initiative;
 import com.stroimvmeste.backend.model.User;
@@ -40,7 +41,8 @@ public class InitiativeService {
         if (initiativeOptional.isPresent()) {
             Initiative initiative = initiativeOptional.get();
             return Optional.of(new InitiativeFullDto(initiative.getId(), initiative.getTitle(),
-                    initiative.getDescription(), getParticipantsLiteDto(title), initiative.getSpecialization().getName(), initiative.getDistrict().getTitle()));
+                    initiative.getDescription(), getParticipantsLiteDto(title),
+                    initiative.getSpecialization().getName(), initiative.getDistrict().getTitle()));
         } else {
             return Optional.empty();
         }
@@ -82,13 +84,14 @@ public class InitiativeService {
         }
     }
 
-    public List<UserLiteDto> getParticipantsLiteDto(String title) {
+    public List<UserDistrictTitleDto> getParticipantsLiteDto(String title) {
         Optional<Initiative> optionalInitiative = initiativeRepository.findByTitle(title);
-        List<UserLiteDto> userLiteDtos = new ArrayList<>();
+        List<UserDistrictTitleDto> userLiteDtos = new ArrayList<>();
         if (optionalInitiative.isPresent()) {
             Initiative initiative = optionalInitiative.get();
             for (User user : initiative.getParticipants()) {
-                userLiteDtos.add(new UserLiteDto(user.getId(), user.getFullName(), user.getUserName(), user.getDistrict().getTitle()));
+                userLiteDtos.add(new UserDistrictTitleDto(user.getId(),
+                        user.getFullName(), user.getUserName(), user.getDistrict().getTitle()));
             }
         }
         return userLiteDtos;
