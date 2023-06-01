@@ -1,10 +1,12 @@
 package com.stroimvmeste.backend.service;
 
+import com.stroimvmeste.backend.dto.ExpertByIdDto;
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.UserDistrictIdDto;
 import com.stroimvmeste.backend.dto.UserDistrictTitleDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.model.District;
+import com.stroimvmeste.backend.model.Specialization;
 import com.stroimvmeste.backend.model.User;
 import com.stroimvmeste.backend.repository.DistrictRepository;
 import com.stroimvmeste.backend.repository.SpecializationRepository;
@@ -25,12 +27,12 @@ public class UserService {
 
     private final DistrictRepository districtRepository;
 
-    public UserLiteDto addUser(UserDistrictIdDto userLiteDto) {
+    public UserDistrictIdDto addUser(UserDistrictIdDto userLiteDto) {
         userRepository.save(mapLiteDtoToUser(userLiteDto));
         return userLiteDto;
     }
 
-    public ExpertDto addExpert(ExpertDto expertDto) {
+    public ExpertByIdDto addExpert(ExpertByIdDto expertDto) {
         userRepository.save(mapExpertDtoToUser(expertDto));
         return expertDto;
     }
@@ -52,13 +54,15 @@ public class UserService {
     }
 
 
-    public User mapExpertDtoToUser(ExpertDto expertDto) {
+    public User mapExpertDtoToUser(ExpertByIdDto expertDto) {
+        District district = districtRepository.findById(expertDto.getDistrictId()).orElse(null);
+        Specialization specialization = specializationRepository.findById(expertDto.getSpecializationId()).orElse(null);
         return new User()
                 .setFullName(expertDto.getFullName())
                 .setUserName(expertDto.getUserName())
                 .setExperience(expertDto.getExperience())
-                .setSpecialization(specializationRepository.findByName(expertDto.getSpecialization()))
-                .setDistrict(districtRepository.findByTitle(expertDto.getDistrict()).orElse(null));
+                .setSpecialization(specialization)
+                .setDistrict(district);
     }
 
     public void deleteUser(Long id) {

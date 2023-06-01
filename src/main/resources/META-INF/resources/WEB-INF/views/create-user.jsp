@@ -13,6 +13,7 @@
 <form:form action="${add_user_url}" method="post" modelAttribute="user">
     <form:label path="fullName">User full name: </form:label> <form:input type="text" path="fullName"/>
     <form:label path="userName">UserName: </form:label> <form:input path="userName"/>
+    <p>Select a district:</p>
     <select name="districtId">
         <c:forEach items="${districts}" var="district">
             <option value="${district.id}">${district.title}</option>

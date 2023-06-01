@@ -39,11 +39,11 @@ public class Initiative {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "specializationId", insertable = false, updatable = false)
+    @JoinColumn(name = "specializationId")
     private Specialization specialization;
 
     @ManyToOne
-    @JoinColumn(name = "districtId", insertable = false, updatable = false)
+    @JoinColumn(name = "districtId")
     private District district;
 
     @ManyToMany

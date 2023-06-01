@@ -14,8 +14,19 @@
     <form:label path="fullName">User full name: </form:label> <form:input type="text" path="fullName"/>
     <form:label path="userName">UserName: </form:label> <form:input path="userName"/>
     <form:label path="experience">Experience: </form:label> <form:input path="experience"/>
-    <form:label path="specialization">Specialization: </form:label> <form:input path="specialization"/>
-    <form:label path="district">District: </form:label> <form:input path="district"/>
+
+    <p>Select a specialization:</p>
+    <select name="specializationId">
+        <c:forEach items="${specializations}" var="specialization">
+            <option value="${specialization.id}">${specialization.name}</option>
+        </c:forEach>
+    </select>
+    <p>Select a district:</p>
+    <select name="districtId">
+        <c:forEach items="${districts}" var="district">
+            <option value="${district.id}">${district.title}</option>
+        </c:forEach>
+    </select>
     <input type="submit" value="submit"/>
 </form:form>
 </body>

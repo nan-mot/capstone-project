@@ -1,9 +1,11 @@
 package com.stroimvmeste.backend.controller;
 
+import com.stroimvmeste.backend.dto.ExpertByIdDto;
 import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.UserDistrictIdDto;
 import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.service.DistrictService;
+import com.stroimvmeste.backend.service.SpecializationService;
 import com.stroimvmeste.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,10 +22,12 @@ public class UserController {
 
     private final UserService userService;
     private final DistrictService districtService;
+    private final SpecializationService specializationService;
+
 
     @GetMapping("/createUser")
     public String createUserView(Model model) {
-        model.addAttribute("user", new UserLiteDto());
+        model.addAttribute("user", new UserDistrictIdDto());
         model.addAttribute("districts", districtService.getAllDistricts());
         return "create-user";
     }
@@ -31,7 +35,7 @@ public class UserController {
     @PostMapping("/createUser")
     public RedirectView createUser(@ModelAttribute("user") UserDistrictIdDto userLiteDto, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("allUsers", true);
-        UserLiteDto savedUser = userService.addUser(userLiteDto);
+        UserDistrictIdDto savedUser = userService.addUser(userLiteDto);
         redirectAttributes.addFlashAttribute("savedUser", savedUser);
         redirectAttributes.addFlashAttribute("addUserSuccess", true);
         return redirectView;
@@ -39,14 +43,16 @@ public class UserController {
 
     @GetMapping("/createExpert")
     public String createExpertView(Model model) {
-        model.addAttribute("expert", new ExpertDto());
+        model.addAttribute("expert", new ExpertByIdDto());
+        model.addAttribute("districts", districtService.getAllDistricts());
+        model.addAttribute("specializations", specializationService.getAllSpecializations());
         return "create-expert";
     }
 
     @PostMapping("/createExpert")
-    public RedirectView createExpert(@ModelAttribute("expert") ExpertDto expertDto, RedirectAttributes redirectAttributes) {
+    public RedirectView createExpert(@ModelAttribute("expert") ExpertByIdDto expertDto, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("allUsers", true);
-        ExpertDto savedExpert = userService.addExpert(expertDto);
+        ExpertByIdDto savedExpert = userService.addExpert(expertDto);
         redirectAttributes.addFlashAttribute("savedExpert", savedExpert);
         redirectAttributes.addFlashAttribute("addExpertSuccess", true);
         return redirectView;
