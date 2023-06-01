@@ -2,24 +2,24 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
     <head>
-        <title>Specializations</title>
+        <title>Districts</title>
     </head>
     <body>
         <table>
             <thead>
                 <tr>
-                    <th>Specialization</th>
+                    <th>District</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${specializations}" var="specialization">
+                <c:forEach items="${districts}" var="district">
                     <tr>
-                        <td>${specialization.name}</td>
+                        <td>${district.title}</td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
         <br/>
-        <a href='<c:url value="/createSpecialization"/>' > Create new specialization </a>
+        <a href='<c:url value="/district/create"/>' > Create new district </a>
     </body>
 </html>

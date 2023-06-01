@@ -6,7 +6,7 @@
     <title>Add participant to the initiative</title>
 </head>
 <body>
-<c:url var="add_participant_url" value="/{initiativeTitle}/addParticipant"/>
+<c:url var="add_participant_url" value="/{initiativeTitle}/participant"/>
 <form:form action="${add_participant_url}" method="post" modelAttribute="participant">
     <form:label path="fullName">User full name: </form:label> <form:input type="text" path="fullName"/>
     <input type="submit" value="submit"/>

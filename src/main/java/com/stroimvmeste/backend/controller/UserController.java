@@ -13,10 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -25,23 +27,23 @@ public class UserController {
     private final SpecializationService specializationService;
 
 
-    @GetMapping("/createUser")
+    @GetMapping("/create")
     public String createUserView(Model model) {
         model.addAttribute("user", new UserDistrictIdDto());
         model.addAttribute("districts", districtService.getAllDistricts());
         return "create-user";
     }
 
-    @PostMapping("/createUser")
+    @PostMapping
     public RedirectView createUser(@ModelAttribute("user") UserDistrictIdDto userLiteDto, RedirectAttributes redirectAttributes) {
-        final RedirectView redirectView = new RedirectView("allUsers", true);
+        final RedirectView redirectView = new RedirectView("/user/all", true);
         UserDistrictIdDto savedUser = userService.addUser(userLiteDto);
         redirectAttributes.addFlashAttribute("savedUser", savedUser);
         redirectAttributes.addFlashAttribute("addUserSuccess", true);
         return redirectView;
     }
 
-    @GetMapping("/createExpert")
+    @GetMapping("/expert/create")
     public String createExpertView(Model model) {
         model.addAttribute("expert", new ExpertByIdDto());
         model.addAttribute("districts", districtService.getAllDistricts());
@@ -49,16 +51,16 @@ public class UserController {
         return "create-expert";
     }
 
-    @PostMapping("/createExpert")
+    @PostMapping("/expert")
     public RedirectView createExpert(@ModelAttribute("expert") ExpertByIdDto expertDto, RedirectAttributes redirectAttributes) {
-        final RedirectView redirectView = new RedirectView("allUsers", true);
+        final RedirectView redirectView = new RedirectView("/user/all", true);
         ExpertByIdDto savedExpert = userService.addExpert(expertDto);
         redirectAttributes.addFlashAttribute("savedExpert", savedExpert);
         redirectAttributes.addFlashAttribute("addExpertSuccess", true);
         return redirectView;
     }
 
-    @GetMapping("/allUsers")
+    @GetMapping("/all")
     public String viewUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "users";

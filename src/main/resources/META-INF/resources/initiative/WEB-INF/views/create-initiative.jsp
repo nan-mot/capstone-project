@@ -9,7 +9,7 @@
 <c:if test="${addInitiativeSuccess}">
     <div> The initiative created successfully : ${savedInitiative.title}</div>
 </c:if>
-<c:url var="add_initiative_url" value="/createInitiative"/>
+<c:url var="add_initiative_url" value="/initiative"/>
 <form:form action="${add_initiative_url}" method="post" modelAttribute="initiative">
     <form:label path="title">Initiative title: </form:label> <form:input type="text" path="title"/>
     <form:label path="description">Description: </form:label> <form:input path="description"/>

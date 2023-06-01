@@ -9,7 +9,7 @@
 <c:if test="${addUserSuccess}">
     <div> User created successfully : ${savedUser.fullName}</div>
 </c:if>
-<c:url var="add_user_url" value="/createUser"/>
+<c:url var="add_user_url" value="/user"/>
 <form:form action="${add_user_url}" method="post" modelAttribute="user">
     <form:label path="fullName">User full name: </form:label> <form:input type="text" path="fullName"/>
     <form:label path="userName">UserName: </form:label> <form:input path="userName"/>

@@ -26,6 +26,6 @@
             </tbody>
         </table>
         <br/>
-        <a href='<c:url value="/createInitiative"/>' > Create new initiative </a>
+        <a href='<c:url value="/initiative/create"/>' > Create new initiative </a>
     </body>
 </html>

@@ -9,7 +9,7 @@
 <c:if test="${addExpertSuccess}">
     <div> Expert created successfully : ${savedExpert.fullName}</div>
 </c:if>
-<c:url var="add_expert_url" value="/createExpert"/>
+<c:url var="add_expert_url" value="/user/expert"/>
 <form:form action="${add_expert_url}" method="post" modelAttribute="expert">
     <form:label path="fullName">User full name: </form:label> <form:input type="text" path="fullName"/>
     <form:label path="userName">UserName: </form:label> <form:input path="userName"/>

@@ -24,8 +24,8 @@
             </tbody>
         </table>
         <br/>
-        <a href='<c:url value="/createUser"/>' > Create new user </a>
+        <a href='<c:url value="/user/create"/>' > Create new user </a>
         <br/>
-        <a href='<c:url value="/createExpert"/>' > Create new expert </a>
+        <a href='<c:url value="/user/expert/create"/>' > Create new expert </a>
     </body>
 </html>

@@ -25,9 +25,9 @@
     </tbody>
 </table>
 <br/>
-<a href='<c:url value="/${initiative.title}/addParticipant"/>' > Take part in the initiative </a>
+<a href='<c:url value="/initiative/${initiative.title}/participant/add"/>' > Take part in the initiative </a>
 <br/>
-<a href='<c:url value="/${initiative.title}/experts"/>' > Generate list of experts </a>
+<a href='<c:url value="/initiative/${initiative.title}/experts"/>' > Generate list of experts </a>
 <br/>
 </body>
 </html>
