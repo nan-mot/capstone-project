@@ -1,4 +1,7 @@
-INSERT INTO district VALUES (1, 'East')
-INSERT INTO district VALUES (2, 'West')
-INSERT INTO district VALUES (3, 'North')
-INSERT INTO district VALUES (4, 'South')
+INSERT INTO district (title) VALUES ('East');
+INSERT INTO district (title) VALUES ('West');
+INSERT INTO district (title) VALUES ('North');
+INSERT INTO district (title) VALUES ('South');
+
+INSERT INTO specialization (name) VALUES ('Landscaping');
+INSERT INTO specialization (name) VALUES ('Construction');
