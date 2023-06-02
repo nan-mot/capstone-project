@@ -3,27 +3,28 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Create new initiative</title>
+    <title>Update initiative</title>
 </head>
 <body>
-<c:if test="${addInitiativeSuccess}">
-    <div> The initiative created successfully : ${savedInitiative.title}</div>
+<c:if test="${updateInitiativeSuccess}">
+    <div> Initiative saved : ${updatedInitiative.id}</div>
 </c:if>
-<c:url var="add_initiative_url" value="/initiative"/>
-<form:form action="${add_initiative_url}" method="post" modelAttribute="initiative">
+
+<c:url var="update_initiative_url" value="/initiative/update"/>
+<form:form action="${update_initiative_url}" method="post" modelAttribute="initiative">
     <form:label path="title">Initiative title: </form:label> <form:input type="text" path="title"/>
+    <br/>
+    <br/>
     <form:label path="description">Description: </form:label> <form:input path="description"/>
-        <br/>
-        <br/>
-    <p>Select a specialization:</p>
+    <form:label path="id" > </form:label> <form:input type="text" path="id" style="visibility:hidden;"/>
+    <br/>
+    <p>Select a specialization: </p>
     <select name="specializationId">
         <c:forEach items="${specializations}" var="specialization">
             <option value="${specialization.id}">${specialization.name}</option>
         </c:forEach>
-            <br/>
-            <br/>
     </select>
-    <p>Select a district:</p>
+    <p>Select a district: </p>
     <select name="districtId">
         <c:forEach items="${districts}" var="district">
             <option value="${district.id}">${district.title}</option>

@@ -1,9 +1,7 @@
 package com.stroimvmeste.backend.controller;
 
 import com.stroimvmeste.backend.dto.ExpertByIdDto;
-import com.stroimvmeste.backend.dto.ExpertDto;
 import com.stroimvmeste.backend.dto.UserDistrictIdDto;
-import com.stroimvmeste.backend.dto.UserLiteDto;
 import com.stroimvmeste.backend.service.DistrictService;
 import com.stroimvmeste.backend.service.SpecializationService;
 import com.stroimvmeste.backend.service.UserService;

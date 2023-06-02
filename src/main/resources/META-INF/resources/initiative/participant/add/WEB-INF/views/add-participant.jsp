@@ -6,9 +6,14 @@
     <title>Add participant to the initiative</title>
 </head>
 <body>
-<c:url var="add_participant_url" value="/{initiativeTitle}/participant"/>
+<c:url var="add_participant_url" value="/initiative/${initiative.id}/participant"/>
 <form:form action="${add_participant_url}" method="post" modelAttribute="participant">
-    <form:label path="fullName">User full name: </form:label> <form:input type="text" path="fullName"/>
+    <p>Select new participant:</p>
+    <select name="participantId">
+        <c:forEach items="${users}" var="participant">
+            <option value="${participant.id}">${participant.fullName}</option>
+        </c:forEach>
+    </select>
     <input type="submit" value="submit"/>
 </form:form>
 </body>

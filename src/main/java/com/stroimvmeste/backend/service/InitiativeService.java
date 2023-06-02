@@ -1,11 +1,13 @@
 package com.stroimvmeste.backend.service;
 
 import com.stroimvmeste.backend.dto.ExpertDto;
+import com.stroimvmeste.backend.dto.InitiativeByIdDto;
 import com.stroimvmeste.backend.dto.InitiativeFullDto;
 import com.stroimvmeste.backend.dto.InitiativeLiteDto;
 import com.stroimvmeste.backend.dto.UserDistrictTitleDto;
-import com.stroimvmeste.backend.dto.UserLiteDto;
+import com.stroimvmeste.backend.model.District;
 import com.stroimvmeste.backend.model.Initiative;
+import com.stroimvmeste.backend.model.Specialization;
 import com.stroimvmeste.backend.model.User;
 import com.stroimvmeste.backend.repository.DistrictRepository;
 import com.stroimvmeste.backend.repository.InitiativeRepository;
@@ -13,6 +15,7 @@ import com.stroimvmeste.backend.repository.SpecializationRepository;
 import com.stroimvmeste.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,12 +39,12 @@ public class InitiativeService {
         return initiativeLiteDtos;
     }
 
-    public Optional<InitiativeFullDto> getInitiative(String title) {
-        Optional<Initiative> initiativeOptional = initiativeRepository.findByTitle(title);
+    public Optional<InitiativeFullDto> getInitiative(Long id) {
+        Optional<Initiative> initiativeOptional = initiativeRepository.findById(id);
         if (initiativeOptional.isPresent()) {
             Initiative initiative = initiativeOptional.get();
             return Optional.of(new InitiativeFullDto(initiative.getId(), initiative.getTitle(),
-                    initiative.getDescription(), getParticipantsLiteDto(title),
+                    initiative.getDescription(), getParticipantsLiteDto(initiative.getTitle()),
                     initiative.getSpecialization().getName(), initiative.getDistrict().getTitle()));
         } else {
             return Optional.empty();
@@ -49,10 +52,25 @@ public class InitiativeService {
     }
 
 
-    public InitiativeLiteDto addInitiative(InitiativeLiteDto initiativeLiteDto) {
+    public InitiativeByIdDto addInitiative(InitiativeByIdDto initiativeLiteDto) {
         initiativeRepository.save(mapLiteDtoToInitiative(initiativeLiteDto));
         return initiativeLiteDto;
     }
+
+    public InitiativeByIdDto updateInitiative(InitiativeByIdDto initiativeLiteDto) {
+        Optional<Initiative> initiativeOptional = initiativeRepository.findById(initiativeLiteDto.getId());
+        District district = districtRepository.findById(initiativeLiteDto.getDistrictId()).orElse(null);
+        Specialization specialization = specializationRepository.findById(initiativeLiteDto.getSpecializationId()).orElse(null);
+        if (initiativeOptional.isPresent()) {
+            initiativeOptional.get().setTitle(initiativeLiteDto.getTitle())
+                    .setDescription(initiativeLiteDto.getDescription())
+                    .setDistrict(district)
+                    .setSpecialization(specialization);
+            initiativeRepository.save(initiativeOptional.get());
+        }
+        return initiativeLiteDto;
+    }
+
 
     public InitiativeLiteDto mapInitiativeToLiteDto(Initiative initiative) {
         return new InitiativeLiteDto()
@@ -63,26 +81,32 @@ public class InitiativeService {
                 .setDistrict(initiative.getDistrict().getTitle());
     }
 
-    public Initiative mapLiteDtoToInitiative(InitiativeLiteDto initiativeLiteDto) {
+    public Initiative mapLiteDtoToInitiative(InitiativeByIdDto initiativeLiteDto) {
+        District district = districtRepository.findById(initiativeLiteDto.getDistrictId()).orElse(null);
+        Specialization specialization = specializationRepository.findById(initiativeLiteDto.getSpecializationId()).orElse(null);
         return new Initiative()
                 .setTitle(initiativeLiteDto.getTitle())
                 .setDescription(initiativeLiteDto.getDescription())
-                .setSpecialization(specializationRepository.findByName(initiativeLiteDto.getSpecialization()))
-                .setDistrict(districtRepository.findByTitle(initiativeLiteDto.getDistrict()).orElse(null));
+                .setSpecialization(specialization)
+                .setDistrict(district);
     }
 
     public void deleteInitiative(Long id) {
         initiativeRepository.deleteById(id);
     }
 
-    public void addParticipant(String initiativeTitle, String userName) {
-        Optional<Initiative> optionalInitiative = initiativeRepository.findByTitle(initiativeTitle);
+    public void addParticipant(Long initiativeId, Long participantId) {
+        Optional<Initiative> optionalInitiative = initiativeRepository.findById(initiativeId);
         if (optionalInitiative.isPresent()) {
             Initiative initiative = optionalInitiative.get();
-            Optional<User> optionalUser = userRepository.findByUserName(userName);
-            optionalUser.ifPresent(user -> initiative.getParticipants().add(user));
+            Optional<User> optionalUser = userRepository.findById(participantId);
+            if (optionalUser.isPresent() & !initiative.getParticipants().contains(optionalUser.get())) {
+                optionalUser.ifPresent(user -> initiative.getParticipants().add(user));
+                initiativeRepository.save(initiative);
+            }
         }
     }
+
 
     public List<UserDistrictTitleDto> getParticipantsLiteDto(String title) {
         Optional<Initiative> optionalInitiative = initiativeRepository.findByTitle(title);
@@ -97,8 +121,8 @@ public class InitiativeService {
         return userLiteDtos;
     }
 
-    public List<ExpertDto> generateListOfExperts(String title) {
-        Initiative initiative = initiativeRepository.findByTitle(title).get();
+    public List<ExpertDto> generateListOfExperts(Long id) {
+        Initiative initiative = initiativeRepository.findById(id).get();
         long specializationId = initiative.getSpecialization().getId();
         List<User> participants = initiative.getParticipants();
         List<User> experts = new ArrayList<>();

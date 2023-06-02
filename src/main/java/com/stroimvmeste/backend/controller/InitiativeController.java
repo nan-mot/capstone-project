@@ -1,9 +1,11 @@
 package com.stroimvmeste.backend.controller;
 
+import com.stroimvmeste.backend.dto.InitiativeByIdDto;
 import com.stroimvmeste.backend.dto.InitiativeFullDto;
-import com.stroimvmeste.backend.dto.InitiativeLiteDto;
-import com.stroimvmeste.backend.dto.UserLiteDto;
+import com.stroimvmeste.backend.service.DistrictService;
 import com.stroimvmeste.backend.service.InitiativeService;
+import com.stroimvmeste.backend.service.SpecializationService;
+import com.stroimvmeste.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +26,23 @@ public class InitiativeController {
 
     private final InitiativeService initiativeService;
 
+    private final DistrictService districtService;
+
+    private final SpecializationService specializationService;
+
+    private final UserService userService;
+
     @GetMapping("/create")
     public String createInitiativeView(Model model) {
-        model.addAttribute("initiative", new InitiativeLiteDto());
+        model.addAttribute("initiative", new InitiativeByIdDto());
+        model.addAttribute("districts", districtService.getAllDistricts());
+        model.addAttribute("specializations", specializationService.getAllSpecializations());
         return "create-initiative";
     }
     @PostMapping
-    public RedirectView createInitiative(@ModelAttribute("initiative") InitiativeLiteDto initiativeLiteDto, RedirectAttributes redirectAttributes) {
+    public RedirectView createInitiative(@ModelAttribute("initiative") InitiativeByIdDto initiativeLiteDto, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("/initiative/all", true);
-        InitiativeLiteDto savedInitiative = initiativeService.addInitiative(initiativeLiteDto);
+        InitiativeByIdDto savedInitiative = initiativeService.addInitiative(initiativeLiteDto);
         redirectAttributes.addFlashAttribute("savedInitiative", savedInitiative);
         redirectAttributes.addFlashAttribute("addInitiativeSuccess", true);
         return redirectView;
@@ -43,9 +53,9 @@ public class InitiativeController {
         return "initiatives";
     }
 
-    @GetMapping("/{initiativeTitle}")
-    public String viewInitiative(Model model, @PathVariable String initiativeTitle) {
-        Optional<InitiativeFullDto> optional = initiativeService.getInitiative(initiativeTitle);
+    @GetMapping("/{initiativeId}")
+    public String viewInitiative(Model model, @PathVariable Long initiativeId) {
+        Optional<InitiativeFullDto> optional = initiativeService.getInitiative(initiativeId);
         if (optional.isEmpty()) {
             model.addAttribute("entity", "Initiative");
             return "not-found";
@@ -54,23 +64,53 @@ public class InitiativeController {
         return "initiative";
     }
 
-    @GetMapping("/{initiativeTitle}/participant/add")
-    public String addParticipantView(Model model) {
-        model.addAttribute("participant", new UserLiteDto());
+    @GetMapping("/participant/add/{initiativeId}")
+    public String addParticipantView(Model model, @PathVariable Long initiativeId) {
+        Optional<InitiativeFullDto> optional = initiativeService.getInitiative(initiativeId);
+        if (optional.isEmpty()) {
+            model.addAttribute("entity", "Initiative");
+            return "not-found";
+        }
+        model.addAttribute("initiative", optional.get());
+        model.addAttribute("users", userService.getAllUsers());
         return "add-participant";
     }
 
-    @PostMapping("/{initiativeTitle}/participant")
-    public RedirectView addParticipant(@ModelAttribute("participant") UserLiteDto userLiteDto, @PathVariable String initiativeTitle) {
-        initiativeService.addParticipant(initiativeTitle, userLiteDto.getUserName());
-        return new RedirectView("/initiative/{initiativeTitle}", true);
+    @PostMapping("/{initiativeId}/participant")
+    public RedirectView addParticipant(@ModelAttribute("participantId") Long participantId, @PathVariable Long initiativeId) {
+        initiativeService.addParticipant(initiativeId, participantId);
+        return new RedirectView("/initiative/" + initiativeId, true);
     }
 
 
-    @GetMapping("/{initiativeTitle}/experts")
-    public String viewExperts(Model model, @PathVariable String initiativeTitle) {
-        model.addAttribute("experts", initiativeService.generateListOfExperts(initiativeTitle));
+    @GetMapping("/experts/{initiativeId}")
+    public String viewExperts(Model model, @PathVariable Long initiativeId) {
+        model.addAttribute("experts", initiativeService.generateListOfExperts(initiativeId));
         return "experts";
+    }
+
+    @GetMapping("/update/{initiativeId}")
+    public String updateInitiativeView(Model model, @PathVariable Long initiativeId) {
+        model.addAttribute("initiative", initiativeService.getInitiative(initiativeId));
+        model.addAttribute("districts", districtService.getAllDistricts());
+        model.addAttribute("specializations", specializationService.getAllSpecializations());
+        return "update-initiative";
+    }
+
+    @PostMapping("/update")
+    public RedirectView updateInitiative(@ModelAttribute("initiative") InitiativeByIdDto initiativeLiteDto, RedirectAttributes redirectAttributes) {
+        final RedirectView redirectView = new RedirectView("/initiative/all", true);
+        InitiativeByIdDto updatedInitiative = initiativeService.updateInitiative(initiativeLiteDto);
+        redirectAttributes.addFlashAttribute("updatedInitiative", updatedInitiative);
+        redirectAttributes.addFlashAttribute("updatedInitiativeSuccess", true);
+        return redirectView;
+    }
+
+    @GetMapping("/delete/{initiativeId}")
+    public RedirectView deleteInitiative(@PathVariable Long initiativeId) {
+        initiativeService.deleteInitiative(initiativeId);
+        final RedirectView redirectDeleteView = new RedirectView("/initiative/all", true);
+        return redirectDeleteView;
     }
 
 }
