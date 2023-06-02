@@ -28,7 +28,7 @@ import java.util.List;
 public class Initiative {
     @Id
     @Column(name = "initiative_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title",

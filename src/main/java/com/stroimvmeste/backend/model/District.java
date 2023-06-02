@@ -29,7 +29,7 @@ import java.util.List;
 public class District {
     @Id
     @Column(name = "district_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title",

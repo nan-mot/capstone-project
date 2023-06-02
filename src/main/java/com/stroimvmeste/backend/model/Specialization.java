@@ -26,7 +26,7 @@ import java.util.List;
 public class Specialization {
     @Id
     @Column(name = "specialization_name")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name",
